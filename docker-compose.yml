@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  samba:
+    image: dperson/samba
+    container_name: samba-server
+    restart: unless-stopped
+    ports:
+      - "139:139"
+      - "445:445"
+    environment:
+      USERID: 1000
+      GROUPID: 1000
+    volumes:
+      - /home/delvalle/Documentos/compartida:/mount/Compartido
+    command: >
+      -u "${SAMBA_USER};${SAMBA_PASS}"
+      -s "Public;/mount/Compartido;yes;no;yes;${SAMBA_USER}"
+    networks:
+      - samba-net
+
+networks:
+  samba-net:
+    driver: bridge
